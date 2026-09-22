@@ -1,56 +1,136 @@
-# Food Delivery CRUD API
+# 🍔 Food Delivery CRUD API
 
-This is a small REST API made for the CRUD API classroom activity. It manages food-delivery orders using Node.js and Express.
+A simple RESTful CRUD API for managing food-delivery orders, built with **Node.js, Express.js, and JavaScript**.
 
-## Technology Used
+This project was created as a classroom CRUD API activity. It uses an **in-memory JavaScript array** instead of a database, keeping the implementation focused on understanding REST API fundamentals.
 
-- Node.js
-- Express.js
-- JavaScript
-- In-memory array for storage
-- Postman for testing
+## ✨ Features
 
-No database is used in this activity.
+- Create a new food-delivery order
+- View all orders
+- View a single order by ID
+- Update an existing order
+- Delete an order
+- JSON request and response handling
+- Basic request validation
+- `404 Not Found` handling for missing orders
+- `201 Created` response when an order is successfully created
+- Five sample orders available when the server starts
+- Ready-to-use Postman collection for API testing
 
-## Order Data
+## 🛠️ Tech Stack
 
-Each order has:
+| Technology | Purpose |
+|---|---|
+| Node.js | JavaScript runtime |
+| Express.js | REST API framework |
+| JavaScript | Application logic |
+| JSON | API request/response format |
+| Postman | API testing |
 
-- `id` - unique number
-- `customerName` - name of the customer
-- `restaurant` - restaurant name
-- `item` - food item
-- `amount` - order amount
-- `status` - current order status
+No MongoDB, Mongoose, Firebase, or other database is required.
 
-## How to Run
+## 📁 Project Structure
 
-Make sure Node.js is installed.
+```text
+food-delivery-crud-api/
+│
+├── data/
+│   └── sample-orders.json       # Sample order data
+│
+├── routes/
+│   └── orders.js                # CRUD routes and in-memory data
+│
+├── postman_collection.json      # Ready-to-import Postman requests
+├── .gitignore
+├── package.json
+├── README.md
+└── server.js                    # Express application entry point
+```
 
-Open a terminal in this folder and run:
+## 📦 Installation
+
+Make sure **Node.js** and **npm** are installed on your system.
+
+Clone the repository and enter the project directory:
+
+```bash
+git clone https://github.com/Jyatin/food-delivery-crud-api.git
+cd food-delivery-crud-api
+```
+
+Install the dependencies:
 
 ```bash
 npm install
+```
+
+## ▶️ Run the API
+
+Start the server with:
+
+```bash
 npm start
 ```
 
-The API will run on:
+The server runs at:
 
-`http://localhost:3000`
+```text
+http://localhost:3000
+```
 
-## API Operations
+For development, you can also use:
 
-### 1. Get all orders
+```bash
+npm run dev
+```
 
-`GET /orders`
+## 🔗 API Endpoints
 
-Returns all available orders.
+Base URL:
 
-### 2. Create an order
+```text
+http://localhost:3000
+```
 
-`POST /orders`
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/` | Shows API information and available routes |
+| `GET` | `/orders` | Returns all orders |
+| `GET` | `/orders/:id` | Returns one order by ID |
+| `POST` | `/orders` | Creates a new order |
+| `PUT` | `/orders/:id` | Updates an existing order |
+| `DELETE` | `/orders/:id` | Deletes an order |
 
-Example body:
+## 📋 Order Format
+
+Every order follows this structure:
+
+```json
+{
+  "id": 1,
+  "customerName": "Rahul",
+  "restaurant": "Burger Singh",
+  "item": "Chicken Burger",
+  "amount": 249,
+  "status": "Pending"
+}
+```
+
+### Fields
+
+- **id** — unique identifier for the order
+- **customerName** — name of the customer
+- **restaurant** — restaurant handling the order
+- **item** — food item ordered
+- **amount** — total order amount
+- **status** — current order status
+
+## ➕ Create an Order
+
+**POST** `/orders`
+
+Request body:
 
 ```json
 {
@@ -62,19 +142,37 @@ Example body:
 }
 ```
 
-A successful request returns status `201`.
+A successful request returns **HTTP 201 Created** and the newly created order.
 
-### 3. Get an order by ID
+If `status` is not supplied, the API uses `Pending` by default.
 
-`GET /orders/1`
+## 🔍 Read Orders
 
-If the ID does not exist, the API returns status `404`.
+### Get all orders
 
-### 4. Update an order
+**GET** `/orders`
 
-`PUT /orders/1`
+The API starts with five sample orders.
 
-Example body:
+### Get one order
+
+**GET** `/orders/1`
+
+If the requested ID does not exist, the API returns:
+
+```json
+{
+  "message": "Order not found"
+}
+```
+
+with **HTTP 404 Not Found**.
+
+## ✏️ Update an Order
+
+**PUT** `/orders/1`
+
+Request body:
 
 ```json
 {
@@ -86,25 +184,79 @@ Example body:
 }
 ```
 
-### 5. Delete an order
+The API replaces the order with the updated values while keeping the same ID.
 
-`DELETE /orders/1`
+## 🗑️ Delete an Order
 
-The selected order is removed from the array.
+**DELETE** `/orders/5`
 
-## Postman Testing
+A successful request removes the order from the in-memory array and returns the deleted order.
 
-The file `postman_collection.json` contains requests for:
+If the ID does not exist, the API returns **HTTP 404 Not Found**.
 
-1. Reading all orders
-2. Creating an order
-3. Reading an order by ID
-4. Updating an order
-5. Deleting an order
-6. Checking the 404 response
+## 🧪 Testing with Postman
 
-Import the collection into Postman after starting the server.
+A ready-to-use collection is included in:
 
-## Storage Note
+```text
+postman_collection.json
+```
 
-The orders are stored in a JavaScript array because the activity specifically asks for in-memory storage. Therefore, the data goes back to the five initial orders when the server is restarted.
+It contains requests for:
+
+1. Get all orders
+2. Create an order
+3. Get an order by ID
+4. Update an order
+5. Delete an order
+6. Test a missing order and the `404` response
+
+Start the API first, then import `postman_collection.json` into Postman.
+
+## 💾 Data Storage
+
+This project intentionally uses an in-memory array for storing orders. There is no database connection.
+
+This means any changes made through POST, PUT, or DELETE exist only while the Node.js server is running. Restarting the server resets the data to the five original sample orders.
+
+## ⚠️ Validation and Error Handling
+
+The API checks that required order fields are provided when creating or updating an order.
+
+Examples of responses include:
+
+**Successful creation:**
+
+```text
+201 Created
+```
+
+**Order not found:**
+
+```text
+404 Not Found
+```
+
+**Invalid or incomplete request:**
+
+```text
+400 Bad Request
+```
+
+## 🎯 Learning Objectives
+
+This project demonstrates the basic concepts behind a REST API:
+
+- HTTP methods and their purpose
+- RESTful route design
+- Express routing
+- JSON request bodies
+- HTTP status codes
+- CRUD operations
+- URL parameters
+- Basic input validation
+- In-memory data management
+
+## 📄 License
+
+This project was created for educational purposes as part of a classroom CRUD API activity.
